@@ -3,6 +3,7 @@ const fsP = require("fs/promises");
 const argv = process.argv;
 
 // Reads a utf8 file
+    // refactor using module.export so we don't have duplicate code... in writing the file below
 async function cat(path) {
   try {
     let content = await fsP.readFile(path, "utf8");
@@ -31,10 +32,12 @@ if (argv[2] === "--out") {
 }
 
 // Reads a utf8 file and writes to a new file
+// await not necessary to write (suggestion from Nate)
+    // refactor using 'require' since we exported code we don't want to duplicate from above
 async function catWrite(path, filename) {
   try {
     let content = await fsP.readFile(path, "utf8");
-    await fsP.writeFile(filename, content, "utf8");
+    fsP.writeFile(filename, content, "utf8");
   } catch (err) {
     console.log(err);
     process.exit(1);
@@ -42,12 +45,13 @@ async function catWrite(path, filename) {
 }
 
 // Reads a URL and writes to a new file
+// await not necessary to write (suggestion from Nate)
 async function webCatWrite(url, filename) {
     try {
         const resp = await axios.get(url);
         // console.log(resp.data.slice(0, 100), '...');
         // console.log(resp.data);
-        await fsP.writeFile(filename, resp.data)
+        fsP.writeFile(filename, resp.data)
     } catch (err) {
         let msg = `Error fetching ${url}: \nError: Request failed with status code 404`;
         console.log(msg);
@@ -57,7 +61,10 @@ async function webCatWrite(url, filename) {
 
 // Note: alternative to startsWith is to resolve the domain using a DNS lookup (Tim suggested, but not required)
 // if --out, then read from a file and write to a new file
-// and determines if utf8 file or URL and invokes relevant function
+    // and determines if utf8 file or URL and invokes relevant function
+// else,
+    // only read file and print content, 
+    // and determines if utf8 file or URL and invokes relevant function
 
 if (argv[2] === "--out") {
   if (argv[4].startsWith('http')) {
