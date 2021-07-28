@@ -28,8 +28,13 @@ async function webCat(url) {
 
 // Note: alternative to startsWith is to resolve the domain using a DNS lookup (Tim suggested, but not required)
 // Determines if utf8 file or URL and invokes relevant function
-if (argv[2].startsWith('http')) {
-    webCat(argv[2]); 
-} else {
-    cat(argv[2]); 
+// if (argv[2].startsWith('http')) {
+//     webCat(argv[2]); 
+// } else {
+//     cat(argv[2]); 
+// }
+
+module.exports = {
+  cat,
+  webCat
 }
